@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
+set -e
+set -x
 
-chmod 755 comet.2018012.linux.exe
-cp comet.2018012.linux.exe ${PREFIX}/bin/comet
+platform="$(uname)"
+if [ "$platform" = "Darwin" ]; then
+	unzip comet_source_"$PKG_VERSION".zip
+	sed -i bak -e 's/ -static//' Makefile
+	make
+elif [ "$platform" = "Linux"]; then
+	mv comet.2018012.linux.exe comet.exe
+fi
+chmod 755 comet.exe
+cp comet.exe ${PREFIX}/bin/comet
 cd ${PREFIX}/bin/
 ln -s comet comet.exe
